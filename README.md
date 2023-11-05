@@ -44,95 +44,122 @@ Caso tenha dúvidas, visitar a [documentação](https://airflow.apache.org/docs/
 
 ### Criar conta na AWS
 
-Criar uma conta na AWS e fazer o login.
+1. Criar uma [conta na AWS](https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwjAsan6qK2CAxWznVoFHQsWDoQYABAAGgJ2dQ&ase=2&gclid=EAIaIQobChMIwLGp-qitggMVs51aBR0LFg6EEAAYASAAEgKmIvD_BwE&ohost=www.google.com&cid=CAASJORoDeOFQkYZaTPYRdzliq9Zx_XBUo7PjMlTDdyGYQmvH8K9Gg&sig=AOD64_3UuKgxK2EF8RXgITpJ7PsabxFV0A&q&nis=4&adurl&ved=2ahUKEwjhmp_6qK2CAxU6rpUCHSP5D5QQ0Qx6BAgGEAE) e fazer o login.
+
+- **Página inicial**: Página home sem login.
 
 ![Página inicial](assets/aws-registrar-conta.png)
 
-[Site AWS](https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwjAsan6qK2CAxWznVoFHQsWDoQYABAAGgJ2dQ&ase=2&gclid=EAIaIQobChMIwLGp-qitggMVs51aBR0LFg6EEAAYASAAEgKmIvD_BwE&ohost=www.google.com&cid=CAASJORoDeOFQkYZaTPYRdzliq9Zx_XBUo7PjMlTDdyGYQmvH8K9Gg&sig=AOD64_3UuKgxK2EF8RXgITpJ7PsabxFV0A&q&nis=4&adurl&ved=2ahUKEwjhmp_6qK2CAxU6rpUCHSP5D5QQ0Qx6BAgGEAE)
+- **Página inicial**: Página home após cadastro e logi
+
+![Página inicial após cadastro e login](assets/painel-principal.png)
+
+2. Criar uma instancia EC2.
+
+A máquina EC2 é um servidor virtual na nuvem da Amazon Web Services (AWS) que fornece capacidade computacional escalável. Utilizamos no Airflow para hospedar e executar fluxos de trabalho de forma flexível e confiável, aproveitando a infraestrutura elástica da AWS.
+
+3. Acessando via SSH
+
+No terminal digitar
+
+```bash
+ssh ubuntu@<Public IPv4 address>
+```
+
+Vai dar acesso negado
+
+``` 
+Permission denied (publickey).
+```
+
+Previsamos de uma chave para acessar a máquina EC2. Para isso, vamos conectar com a chave que criamnos anteriormente.
+
+```bash
+ssh -i <path-to-key> ubuntu@<Public IPv4 address>
+```
+
+Vai dar erro de permissão
+
+```bash
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Permissions 0644 for 'airflow-workshop.pem' are too open.
+It is required that your private key files are NOT accessible by others.
+This private key will be ignored.
+```
+
+```bash
+chmod 0400 <path-to-key>
+```
+
+Tentar novamente e
+
+```
+ssh -i <path-to-key> ubuntu@<Public IPv4 address>
+```
+
+Tudo certo!
+
+Obs: Caso use [Windows verificar esse tutorial aqui](https://www.youtube.com/watch?v=kzLRxVgos2M)
 
 Crie e ative um ambiente virtual para o Airflow.
 
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
 
-## Instalação do Apache Airflow
+Acessar pelo VScode
 
-Instale o Airflow com suporte a PostgreSQL.
+Ativar o ambiente virtual
 
 ```bash
-pip install 'apache-airflow==2.7.1' \
- --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.7.1/constraints-3.8.txt"
+sudo apt update
+
+sudo apt install python3-pip
+
+sudo apt install sqlite3
+
+sudo apt install python3.10-venv
+
+sudo apt-get install libpq-dev
 ```
 
-Inicialize o banco de dados do Airflow.
+Criar um ambiente virtual de Python
 
 ```bash
-airflow db init
+python3 -m venv .venv
+
+source .venv/bin/activate
 ```
 
-## Configuração do PostgreSQL
+instale o Airflow sem suporte a PostgreSQL.
 
-Instale o PostgreSQL e suas dependências.
+
+Configurar o Home do Airflow
 
 ```bash
-sudo apt-get install postgresql postgresql-contrib
+export AIRFLOW_HOME=~/airflow
 ```
 
-Mude para o usuário postgres e acesse o PostgreSQL.
+Instalar o Airflow fazendo bruxaria
 
 ```bash
-sudo -i -u postgres
-psql
+AIRFLOW_VERSION=2.7.2
+
+PYTHON_VERSION="$(python --version | cut -d " " -f 2 | cut -d "." -f 1-2)"
+
+CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"
+
+pip install "apache-airflow==${AIRFLOW_VERSION}" --constraint "${CONSTRAINT_URL}"
 ```
 
-Dentro do prompt do psql, crie o banco de dados e o usuário do Airflow.
-
-```sql
-CREATE DATABASE airflow;
-CREATE USER airflow WITH PASSWORD 'airflow';
-GRANT ALL PRIVILEGES ON DATABASE airflow TO airflow;
-```
-
-Saia do psql e volte para o usuário normal.
+Rodar o Airflow no Standalone
 
 ```bash
-\q
-exit
+airflow standalone
 ```
 
-## Configuração do Airflow
+Acessar o Airflow no seu IP na porta 8080
 
-Atualize a configuração do Airflow para usar o PostgreSQL e o executor local.
 
-```bash
-sed -i 's#sqlite:////home/ubuntu/airflow/airflow.db#postgresql+psycopg2://airflow:airflow@localhost/airflow#g' ~/airflow/airflow.cfg
-sed -i 's#SequentialExecutor#LocalExecutor#g' ~/airflow/airflow.cfg
-```
-
-Inicialize novamente o banco de dados do Airflow para aplicar as configurações.
-
-```bash
-airflow db init
-```
-
-## Criação do Usuário do Airflow
-
-Crie um usuário admin para o Airflow.
-
-```bash
-airflow users create -u airflow -f airflow -l airflow -r Admin -e airflow@gmail.com
-```
-
-## Inicialização do Servidor Web e do Agendador
-
-Inicie o servidor web e o agendador do Airflow.
-
-```bash
-airflow webserver &
-airflow scheduler
-```
 
 ## Acesso ao Airflow
 
