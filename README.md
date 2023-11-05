@@ -103,10 +103,7 @@ Tudo certo!
 
 Obs: Caso use [Windows verificar esse tutorial aqui](https://www.youtube.com/watch?v=kzLRxVgos2M)
 
-Crie e ative um ambiente virtual para o Airflow.
-
-
-Acessar pelo VScode
+4) Crie e ative um ambiente virtual para o Airflow.
 
 Ativar o ambiente virtual
 
@@ -130,8 +127,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-instale o Airflow sem suporte a PostgreSQL.
-
+5) Instale o Airflow sem suporte a PostgreSQL.
 
 Configurar o Home do Airflow
 
@@ -151,18 +147,31 @@ CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${A
 pip install "apache-airflow==${AIRFLOW_VERSION}" --constraint "${CONSTRAINT_URL}"
 ```
 
-Rodar o Airflow no Standalone
+Rodar o Airflow
 
 ```bash
-airflow standalone
+airflow db migrate
+
+airflow users create \
+    --username admin \
+    --firstname Peter \
+    --lastname Parker \
+    --role Admin \
+    --email spiderman@superhero.org
+
+airflow webserver &
+
+airflow scheduler
 ```
 
-Acessar o Airflow no seu IP na porta 8080
+6) Acessar o Airflow no seu IP na porta 8080
 
-
+7) Acessar pelo VScode
 
 ## Acesso ao Airflow
 
 Após iniciar o servidor web e o agendador, você pode acessar a interface do Airflow em seu navegador, usando o endereço IP da sua instância EC2 seguido pela porta `8080`. Por exemplo: `http://<EC2-IP-ADDRESS>:8080`.
+
+Acessar pelo VScode
 
 Certifique-se de que a porta `8080` está aberta no grupo de segurança associado à sua instância EC2.
