@@ -58,7 +58,68 @@ Caso tenha dúvidas, visitar a [documentação](https://airflow.apache.org/docs/
 
 A máquina EC2 é um servidor virtual na nuvem da Amazon Web Services (AWS) que fornece capacidade computacional escalável. Utilizamos no Airflow para hospedar e executar fluxos de trabalho de forma flexível e confiável, aproveitando a infraestrutura elástica da AWS.
 
-3. Acessando via SSH
+3. Instalando o Airflow na nossa máquina
+
+Fazer update, instalar sqlite e python na máquina virtual
+
+```bash
+sudo apt update
+
+sudo apt install python3-pip
+
+sudo apt install sqlite3
+
+sudo apt install python3.10-venv
+
+sudo apt-get install libpq-dev
+```
+
+Criar um ambiente virtual de Python
+
+```bash
+python3 -m venv .venv
+
+source .venv/bin/activate
+```
+
+Configurar o Home do Airflow
+
+```bash
+export AIRFLOW_HOME=~/airflow
+```
+
+Instalar o Airflow fazendo bruxaria
+
+```bash
+AIRFLOW_VERSION=2.7.2
+
+PYTHON_VERSION="$(python --version | cut -d " " -f 2 | cut -d "." -f 1-2)"
+
+CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"
+
+pip install "apache-airflow==${AIRFLOW_VERSION}" --constraint "${CONSTRAINT_URL}"
+```
+
+Rodar o Airflow
+
+```bash
+airflow db migrate
+
+airflow users create \
+    --username admin \
+    --firstname Peter \
+    --lastname Parker \
+    --role Admin \
+    --email spiderman@superhero.org
+
+airflow webserver &
+
+airflow scheduler
+```
+
+4. Acessar o Airflow no seu IP na porta 8080
+
+5. Acessando via SSH
 
 No terminal digitar
 
@@ -103,70 +164,8 @@ Tudo certo!
 
 Obs: Caso use [Windows verificar esse tutorial aqui](https://www.youtube.com/watch?v=kzLRxVgos2M)
 
-4) Crie e ative um ambiente virtual para o Airflow.
 
-Ativar o ambiente virtual
-
-```bash
-sudo apt update
-
-sudo apt install python3-pip
-
-sudo apt install sqlite3
-
-sudo apt install python3.10-venv
-
-sudo apt-get install libpq-dev
-```
-
-Criar um ambiente virtual de Python
-
-```bash
-python3 -m venv .venv
-
-source .venv/bin/activate
-```
-
-5) Instale o Airflow sem suporte a PostgreSQL.
-
-Configurar o Home do Airflow
-
-```bash
-export AIRFLOW_HOME=~/airflow
-```
-
-Instalar o Airflow fazendo bruxaria
-
-```bash
-AIRFLOW_VERSION=2.7.2
-
-PYTHON_VERSION="$(python --version | cut -d " " -f 2 | cut -d "." -f 1-2)"
-
-CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"
-
-pip install "apache-airflow==${AIRFLOW_VERSION}" --constraint "${CONSTRAINT_URL}"
-```
-
-Rodar o Airflow
-
-```bash
-airflow db migrate
-
-airflow users create \
-    --username admin \
-    --firstname Peter \
-    --lastname Parker \
-    --role Admin \
-    --email spiderman@superhero.org
-
-airflow webserver &
-
-airflow scheduler
-```
-
-6) Acessar o Airflow no seu IP na porta 8080
-
-7) Acessar pelo VScode
+6) Acessar pelo VScode
 
 ## Acesso ao Airflow
 
