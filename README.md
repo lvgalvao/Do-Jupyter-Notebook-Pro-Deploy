@@ -40,12 +40,15 @@ O Airflow é especialmente útil em contextos de engenharia de dados e ciência 
 
 Este README fornece instruções passo a passo para instalar o Apache Airflow em uma instância EC2 da Amazon usando Ubuntu como sistema operacional. Certifique-se de ter as permissões adequadas e o acesso SSH à sua instância EC2 antes de começar.
 
-Caso tenha dúvidas, visitar a documentação oficial
+Caso tenha dúvidas, visitar a [documentação](https://airflow.apache.org/docs/apache-airflow/stable/start.html)
 
-[Documentação](https://airflow.apache.org/docs/apache-airflow/stable/start.html)
+### Criar conta na AWS
 
-### Configuração da Instância EC2
+Criar uma conta na AWS e fazer o login.
 
+![Página inicial](assets/aws-registrar-conta.png)
+
+[Site AWS](https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwjAsan6qK2CAxWznVoFHQsWDoQYABAAGgJ2dQ&ase=2&gclid=EAIaIQobChMIwLGp-qitggMVs51aBR0LFg6EEAAYASAAEgKmIvD_BwE&ohost=www.google.com&cid=CAASJORoDeOFQkYZaTPYRdzliq9Zx_XBUo7PjMlTDdyGYQmvH8K9Gg&sig=AOD64_3UuKgxK2EF8RXgITpJ7PsabxFV0A&q&nis=4&adurl&ved=2ahUKEwjhmp_6qK2CAxU6rpUCHSP5D5QQ0Qx6BAgGEAE)
 
 Crie e ative um ambiente virtual para o Airflow.
 
