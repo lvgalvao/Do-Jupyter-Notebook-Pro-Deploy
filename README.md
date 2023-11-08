@@ -1,5 +1,11 @@
 # Do Jupyter Notebook pro Deploy em Prod
 
+Repositório do Workshop
+
+## FastAPI
+
+[Projeto FastAPI](https://github.com/lvgalvao/API-Do-Jupyter-Notebook-Pro-Deploy)
+
 ##  Airflow
 
 O Apache Airflow é uma plataforma projetada para criar, agendar e monitorar fluxos de trabalho de forma programática.
