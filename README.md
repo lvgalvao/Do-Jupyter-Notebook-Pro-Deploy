@@ -8,6 +8,8 @@ O objetivo desse workshop é mostrar como é possível fazer o deploy de vários
 
 Fazem parte dessa solução:
 
+[Nosso CRUDO](https://github.com/lvgalvao/crud-fastapi-postgres-streamlit)
+
 [FastAPI](https://github.com/lvgalvao/API-Do-Jupyter-Notebook-Pro-Deploy)
 
 [Banco SQL](https://github.com/lvgalvao/SQL-Do-Jupyter-Notebook-Pro-Deploy)
